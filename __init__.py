@@ -1,28 +1,6 @@
 import os
-import io
-import importlib.util
 from typing import Optional
-
-
-def _load_generator_module(base_dir: str):
-    """Load generator helpers.
-
-    Prefer a normal package import if `generator.py` is inside the package.
-    Fall back to dynamic loading from base_dir/generator.py for backwards
-    compatibility.
-    """
-    try:
-        # generator.py now lives inside this package
-        from . import generator as gen  # type: ignore
-        return gen
-    except Exception:
-        # fallback: load generator.py from base_dir (repo root)
-        gen_path = os.path.join(base_dir, "generator.py")
-        spec = importlib.util.spec_from_file_location("pp_generator", gen_path)
-        mod = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(mod)
-        return mod
-
+from . import generator as gen
 
 def generate_worksheet_pdf(
     worksheet_id: int,
@@ -51,9 +29,6 @@ def generate_worksheet_pdf(
 
     # package_dir where package-local assets (template, media, style) live
     package_dir = os.path.dirname(__file__)
-
-    # load generator helpers from generator.py
-    gen = _load_generator_module(base_dir)
 
     # read template from package directory
     template_path = os.path.join(package_dir, "template.html")
