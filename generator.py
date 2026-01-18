@@ -1,6 +1,6 @@
 from weasyprint import HTML, CSS
 import json
-import tags
+from . import tags
 
 # sample_questions = [
 #     {
