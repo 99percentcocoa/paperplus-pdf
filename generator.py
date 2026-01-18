@@ -163,8 +163,8 @@ def getTagNumbers(id):
     return idTags
 
 # only for corner tags (36h11)
-def generate_tags_html(tags):
-    tag_urls = [f"tags/36h11/tag36_11_{str(id).zfill(5)}.svg" for id in tags]
+def generate_tags_html(tag_ids, tags_folder_path="tags"):
+    tag_urls = [f"{tags_folder_path}/36h11/tag36_11_{str(id).zfill(5)}.svg" for id in tag_ids]
     print(f"tag urls: {tag_urls}")
     tags_html = ""
 
@@ -191,7 +191,7 @@ def generate_question_box(question, q_no):
 
     return option_html
 
-def generate_questions_html(questions):
+def generate_questions_html(questions, tags_folder_path="tags"):
     rows_html = ""
     for i in range(0, len(questions), 2):
         q1 = questions[i]
@@ -201,7 +201,7 @@ def generate_questions_html(questions):
         rows_html += "<td class='row-marker'>\n"
 
         # tag url for 25h9
-        tag_url = f"tags/25h9/tag25_09_{str((i // 2) + 1).zfill(5)}.svg"
+        tag_url = f"{tags_folder_path}/25h9/tag25_09_{str((i // 2) + 1).zfill(5)}.svg"
 
         # tag url for 36h11 tags number 10-20
         # tag_url = f"tags/36h11/tag36_11_{str((i // 2) + 10).zfill(5)}.svg"

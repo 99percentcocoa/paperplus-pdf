@@ -9,6 +9,7 @@ def generate_worksheet_pdf(
     worksheet_date: str,
     worksheet_json_path: str,
     output_path: Optional[str] = None,
+    tags_folder_path: str = "tags",
 ) -> bytes:
     """
     Generate a worksheet PDF and return its bytes.
@@ -20,6 +21,7 @@ def generate_worksheet_pdf(
       worksheet_date: date string to render on the header.
       worksheet_json_path: path to the worksheet json file (used by open_worksheet).
       output_path: if provided, the PDF will also be written to this file path.
+      tags_folder_path: path to the tags folder relative to base_dir (default: "tags").
 
     Returns:
       The generated PDF as bytes.
@@ -39,8 +41,8 @@ def generate_worksheet_pdf(
     questions = gen.open_worksheet(worksheet_json_path)
 
     # generate questions HTML and tags HTML
-    questions_html = gen.generate_questions_html(questions)
-    tags_html = gen.generate_tags_html(gen.getTagNumbers(worksheet_id))
+    questions_html = gen.generate_questions_html(questions, tags_folder_path)
+    tags_html = gen.generate_tags_html(gen.getTagNumbers(worksheet_id), tags_folder_path)
 
     # fill template placeholders
     final_html = (
