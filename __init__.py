@@ -1,6 +1,7 @@
 import os
 from typing import Optional
 from . import generator as gen
+from weasyprint import HTML, CSS
 
 def generate_worksheet_pdf(
     worksheet_id: int,
@@ -8,6 +9,7 @@ def generate_worksheet_pdf(
     student_iyatta: str,
     worksheet_date: str,
     worksheet_json_path: str,
+    checkmarks: bool = False,
     output_path: Optional[str] = None,
     tags_folder_path: str = "tags",
 ) -> bytes:
@@ -20,6 +22,7 @@ def generate_worksheet_pdf(
       student_iyatta: class/grade to render on the header.
       worksheet_date: date string to render on the header.
       worksheet_json_path: path to the worksheet json file (used by open_worksheet).
+      checkmarks: whether to use checkmark style for options (default: False).
       output_path: if provided, the PDF will also be written to this file path.
       tags_folder_path: path to the tags folder relative to base_dir (default: "tags").
 
@@ -36,6 +39,12 @@ def generate_worksheet_pdf(
     template_path = os.path.join(package_dir, "template.html")
     with open(template_path, "r", encoding="utf-8") as f:
         template_html = f.read()
+
+    # read variable style sheets
+    if checkmarks:
+        variable_css = CSS(filename=os.path.join(package_dir, "variable_checkmark.css")) 
+    else:
+        variable_css = CSS(filename=os.path.join(package_dir, "variable_bubbles.css"))
 
     # open worksheet json (use provided path)
     questions = gen.open_worksheet(worksheet_json_path)
@@ -56,14 +65,11 @@ def generate_worksheet_pdf(
     )
 
     # create PDF
-    # Import weasyprint lazily so errors are raised only when generating
-    from weasyprint import HTML
-
     # weasyprint needs a base_url so relative asset URLs (tags and worksheets)
     # resolve. We keep base_url as the repository root so the external
     # "tags/" folder and worksheet json files are found, while package-local
     # assets are referenced in the template with the package prefix.
-    pdf_bytes = HTML(string=final_html, base_url=base_dir).write_pdf()
+    pdf_bytes = HTML(string=final_html, base_url=base_dir).write_pdf(stylesheets=[variable_css])
 
     # optionally write to disk
     if output_path:
