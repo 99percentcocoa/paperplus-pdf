@@ -157,7 +157,7 @@ h2 {
 
 /* Overall table for two columns */
 .questions-table {
-  width: 90%;
+  width: 98%;
   border-collapse: separate;
   border-spacing: 5px 10px; /* note: the vertical spacing applies to the first element also */
   table-layout: fixed;
@@ -169,17 +169,19 @@ h2 {
   border: 1px solid red;
 } */
 
+/* other .markers (corner markers) have fixed position 
+which we don't want for row markers */
+.row-marker .marker {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* td which contains the row marker */
 .row-marker {
   width: 12mm;
   padding: 0;
   vertical-align: middle;
-}
-
-/* other .markers (corner markers) have fixed position 
-which we don't want for row markers */
-.row-marker .marker {
-  position: relative;
 }
 
 /* Question box styling */

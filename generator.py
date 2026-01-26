@@ -196,21 +196,23 @@ def generate_questions_html(questions, tags_folder_path="tags"):
     for i in range(0, len(questions), 2):
         q1 = questions[i]
         q2 = questions[i+1] if i+1 < len(questions) else None
-        rows_html += "<tr>\n"
-        # add one marker per row
-        rows_html += "<td class='row-marker'>\n"
-
+        
         # tag url for 25h9
-        tag_url = f"{tags_folder_path}/25h9/tag25_09_{str((i // 2) + 1).zfill(5)}.svg"
+        tag_url_left = f"{tags_folder_path}/25h9/tag25_09_{str(i + 1).zfill(5)}.svg"
+        tag_url_right = f"{tags_folder_path}/25h9/tag25_09_{str(i + 2).zfill(5)}.svg"
 
-        # tag url for 36h11 tags number 10-20
-        # tag_url = f"tags/36h11/tag36_11_{str((i // 2) + 10).zfill(5)}.svg"
-
-        print(f"Adding {tag_url}")
-        rows_html += f"<div class='marker' style='background-image: url({tag_url})'></div>\n"
+        rows_html += "<tr>\n"
+        # add two markers per row
+        print(f"Adding {tag_url_left}")
+        rows_html += "<td class='row-marker'>\n"
+        rows_html += f"<div class='marker' style='background-image: url({tag_url_left})'></div>\n"
         rows_html += "</td>\n"
         rows_html += f"{generate_question_box(q1, i+1)}\n"
         rows_html += f"{generate_question_box(q2, i+2) if q2 else ''}\n"
+        print(f"Adding {tag_url_right}")
+        rows_html += "<td class='row-marker'>\n"
+        rows_html += f"<div class='marker' style='background-image: url({tag_url_right})'></div>\n"
+        rows_html += "</td>\n"
         rows_html += "</tr>\n"
     
     return rows_html
