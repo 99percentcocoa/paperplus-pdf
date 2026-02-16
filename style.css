@@ -165,9 +165,9 @@ h2 {
 }
 
 /* red border for debugging */
-/* td {
+td {
   border: 1px solid red;
-} */
+}
 
 /* td which contains the row marker */
 .row-marker {
@@ -186,7 +186,7 @@ which we don't want for row markers */
 .question {
   border: 1px solid #000;
   border-radius: 5px;
-  padding: 6px 8px;
+  padding: 6px 0px;
   page-break-inside: avoid;
 
   height: 15mm;
@@ -194,7 +194,7 @@ which we don't want for row markers */
 }
 
 .question p {
-  margin: 0 0 5px;
+  margin: 0 0 5px 1mm;
   font-weight: bold;
 }
 
