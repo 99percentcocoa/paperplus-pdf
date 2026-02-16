@@ -165,9 +165,9 @@ h2 {
 }
 
 /* red border for debugging */
-td {
+/* td {
   border: 1px solid red;
-}
+} */
 
 /* td which contains the row marker */
 .row-marker {
