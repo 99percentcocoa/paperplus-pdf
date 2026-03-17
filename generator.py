@@ -149,9 +149,8 @@ from . import tags
 def open_worksheet(filename):
     with open(filename, "r", encoding="utf-8") as f:
         data = json.load(f)
-    
-    # ansKey = data[0].answerKey
-    questions = data[1]
+
+    questions = data["questions"]
 
     return questions
 

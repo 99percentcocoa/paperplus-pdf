@@ -1,4 +1,5 @@
 import os
+import json
 from typing import Optional
 from . import generator as gen
 
@@ -32,13 +33,36 @@ def generate_worksheet_pdf(
     # package_dir where package-local assets (template, media, style) live
     package_dir = os.path.dirname(__file__)
 
+    # open worksheet json once and select language-specific template
+    with open(worksheet_json_path, "r", encoding="utf-8") as f:
+        worksheet_data = json.load(f)
+
+    # Support both formats:
+    # 1) schema object: {"language": "mr", "questions": [...]}
+    # 2) legacy list: [{"language": "mr", "questions": [...]}]
+    if isinstance(worksheet_data, list):
+        if not worksheet_data:
+            raise ValueError("worksheet JSON list is empty")
+        worksheet = worksheet_data[0]
+    elif isinstance(worksheet_data, dict):
+        worksheet = worksheet_data
+    else:
+        raise ValueError("worksheet JSON must be an object or a non-empty list")
+
+    language = worksheet.get("language")
+    questions = worksheet["questions"]
+
+    if language == "en":
+        template_filename = "template_en.html"
+    elif language == "mr":
+        template_filename = "template_mr.html"
+    else:
+        raise ValueError("worksheet 'language' must be 'en' or 'mr'")
+
     # read template from package directory
-    template_path = os.path.join(package_dir, "template.html")
+    template_path = os.path.join(package_dir, template_filename)
     with open(template_path, "r", encoding="utf-8") as f:
         template_html = f.read()
-
-    # open worksheet json (use provided path)
-    questions = gen.open_worksheet(worksheet_json_path)
 
     # generate questions HTML and tags HTML
     questions_html = gen.generate_questions_html(questions, tags_folder_path)
